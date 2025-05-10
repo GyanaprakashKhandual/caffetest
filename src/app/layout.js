@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Caffee Test",
+  title: "CaffeeTest-Your Test Visualizer",
   description: "This web appp help you to manage and represent your testing materials",
 };
 
