@@ -24,3 +24,42 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* styles/globals.css or app/globals.css */
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+
+
+/* Normal underline animation */
+.underline-animation-infinite {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-animation-infinite::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  /* Adjust position of underline */
+  left: 0;
+  width: 0%;
+  height: 1px;
+  /* Thickness of underline */
+  background-color: #3b82f6;
+  /* Underline color */
+  transition: width 0.3s ease;
+  /* Smooth transition */
+}
+
+.underline-animation-infinite:hover::after {
+  width: 100%;
+}
+

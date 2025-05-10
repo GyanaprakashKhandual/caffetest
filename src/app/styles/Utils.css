@@ -1,0 +1,14 @@
+/* CSS to remove the arrow from the dropdown */
+.no-arrow {
+    -webkit-appearance: none; /* Removes the default arrow in webkit browsers */
+    -moz-appearance: none;    /* Removes the default arrow in Firefox */
+    appearance: none;         /* Removes the default arrow in other browsers */
+    background-image: none;   /* Removes any custom background images */
+    padding-right: 20px;      /* Optional: space for the custom styling */
+  }
+  
+  /* Optional: Styling for the dropdown when no arrow is shown */
+  .no-arrow::-ms-expand {
+    display: none; /* Hides the arrow in IE */
+  }
+  
