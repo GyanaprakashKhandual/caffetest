@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "CaffeeTest - Your Test Visualizer",
   description: "This web appp help you to manage and represent your testing materials",
+  
 };
 
 export default function RootLayout({ children }) {
@@ -27,3 +28,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
