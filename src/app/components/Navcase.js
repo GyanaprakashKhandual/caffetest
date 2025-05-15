@@ -5,7 +5,7 @@ import { FaBug, FaPlus, FaCoffee, FaEdit, FaTrash, FaSearch, FaFilter, FaTimes, 
 import { Bug, Layout, AlertTriangle, FileText, ListChecks, Flame, AlertCircle, CircleDot, Plus, Save, Loader2, X } from 'lucide-react';
 import axios from 'axios';
 import "../styles/Utils.css";
-
+import Swal from 'sweetalert2';
 
 
 const Navbugs = () => {
@@ -98,53 +98,73 @@ const Navbugs = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      if (isEditing && currentSerialNumber) {
-        // Update existing bug
-        const response = await axios.put(
-          `${API_URL}/update/${currentSerialNumber}`,
-          form,
-          {
-            headers: {
-              'Authorization': `Bearer ${TOKEN}`,
-              'Content-Type': 'application/json'
-            }
+  try {
+    if (isEditing && currentSerialNumber) {
+      // Update existing bug
+      const response = await axios.put(
+        `${API_URL}/update/${currentSerialNumber}`,
+        form,
+        {
+          headers: {
+            'Authorization': `Bearer ${TOKEN}`,
+            'Content-Type': 'application/json'
           }
-        );
-
-        if (response.data.success) {
-          fetchBugs(); // Refresh the list
-          resetForm();
         }
-      } else {
-        // Create new bug
-        const response = await axios.post(
-          `${API_URL}/create`,
-          form,
-          {
-            headers: {
-              'Authorization': `Bearer ${TOKEN}`,
-              'Content-Type': 'application/json'
-            }
-          }
-        );
+      );
 
-        if (response.data.success) {
-          fetchBugs(); // Refresh the list
-          resetForm();
-        }
+      if (response.data.success) {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Bug Updated!',
+          text: 'The bug was successfully updated.',
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        fetchBugs(); // Refresh the list
+        resetForm();
       }
-    } catch (error) {
-      console.error('Error saving bug:', error);
-      alert(`Error: ${error.response?.data?.message || error.message}`);
-    } finally {
-      setLoading(false);
+    } else {
+      // Create new bug
+      const response = await axios.post(
+        `${API_URL}/create`,
+        form,
+        {
+          headers: {
+            'Authorization': `Bearer ${TOKEN}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (response.data.success) {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Bug Added!',
+          text: 'The bug has been added successfully.',
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        fetchBugs(); // Refresh the list
+        resetForm();
+      }
     }
-  };
+  } catch (error) {
+    console.error('Error saving bug:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error!',
+      text: error.response?.data?.message || error.message,
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Handle edit
   const handleEdit = (bug) => {
@@ -162,29 +182,49 @@ const Navbugs = () => {
     setShowModal(true);
   };
 
-  // Handle delete
-  const handleDelete = async (serialNumber) => {
-    if (window.confirm('Are you sure you want to delete this bug?')) {
-      try {
-        const response = await axios.delete(
-          `${API_URL}/delete/${serialNumber}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${TOKEN}`,
-              'Content-Type': 'application/json'
-            }
-          }
-        );
 
-        if (response.data.success) {
-          fetchBugs(); // Refresh the list
+
+const handleDelete = async (serialNumber) => {
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: 'You won’t be able to revert this!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+  });
+
+  if (result.isConfirmed) {
+    try {
+      const response = await axios.delete(`${API_URL}/delete/${serialNumber}`, {
+        headers: {
+          'Authorization': `Bearer ${TOKEN}`,
+          'Content-Type': 'application/json'
         }
-      } catch (error) {
-        console.error('Error deleting bug:', error);
-        alert(`Error: ${error.response?.data?.message || error.message}`);
+      });
+
+      if (response.data.success) {
+        await Swal.fire({
+          title: 'Deleted!',
+          text: 'Bug has been deleted.',
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        fetchBugs(); // Refresh the list
       }
+    } catch (error) {
+      console.error('Error deleting bug:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.response?.data?.message || error.message,
+      });
     }
-  };
+  }
+};
+
 
   // Reset form
   const resetForm = () => {
