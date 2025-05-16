@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 const Navbugs = () => {
   
   // Configuration
-  const API_URL = "http://localhost:5000/api/bugs";
+  const API_URL = "https://caffetest-server.onrender.com/api/bugs";
   const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTVjMWE4YWI3MTUxMDE4NDJjM2FjOSIsImlhdCI6MTc0Njg0ODU1NiwiZXhwIjoxNzQ5NDQwNTU2fQ.l1DquuClWJtbhfLA7FGevM2SjK7Ss_PoIkhMfjmUz6o";
 
   // State

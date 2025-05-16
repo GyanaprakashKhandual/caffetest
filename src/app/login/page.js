@@ -44,7 +44,7 @@ const Login = () => {
         e.preventDefault();
         try {
             // You should replace the following URL with your actual login endpoint
-            const response = await fetch("http://localhost:5000/api/auth/login", {
+            const response = await fetch("https://caffetest-server.onrender.com/api/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
